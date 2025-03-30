@@ -31,6 +31,7 @@ public class SecurityConfigure{
                 (csrf) -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers("/edu-api/v1/health").permitAll()
+                                .requestMatchers("/edu-api/v1/log/**").permitAll()
                                 .requestMatchers("/edu-api/v1/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/edu-api/v1/student/**").hasRole("STUDENT")
                                 .anyRequest().authenticated()

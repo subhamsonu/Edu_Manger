@@ -21,17 +21,12 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
 	
-    private final String SECRET_KEY = "secret";
+    private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
     
-    private SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -43,7 +38,7 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-        		.verifyWith(getSigningKey())
+        		.verifyWith(SECRET_KEY)
         		.build()
         		.parseSignedClaims(token)
         		.getPayload();
